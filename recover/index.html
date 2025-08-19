@@ -1,14 +1,29 @@
 <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<script>
-  // Supabase sends the token in the URL fragment (#)
-const p = new URLSearchParams(location.hash.slice(1));
-  const t = p.get("access_token");
-  const type = p.get("type");
-  if (type === "recovery" && t) {
-    // Forward into your app's deep link with query params
-    location.href = `careerly://auth-callback?type=recovery&access_token=${encodeURIComponent(t)}`;
-  } else {
-    document.body.textContent = "Invalid or expired recovery link. Please request a new reset.";
-  }
-</script>
+<body style="font-family: system-ui, sans-serif; padding: 16px">
+  <h3>Password reset</h3>
+  <div id="status">Preparing...</div>
+  <p id="hint" style="display:none">
+    If nothing happens, tap: <a id="deep" href="#">Open app</a>
+  </p>
+  <script>
+    // Remove the leading '#'
+    const p = new URLSearchParams(location.hash.slice(1));
+    const t = p.get("access_token");
+    const type = p.get("type");
+
+    const status = document.getElementById("status");
+    const hint = document.getElementById("hint");
+    const deep = document.getElementById("deep");
+
+    if (type === "recovery" && t) {
+      const deeplink = `careerly://auth-callback?type=recovery&access_token=${encodeURIComponent(t)}`;
+      deep.href = deeplink;
+      status.textContent = "Opening the Careerly app to reset your password...";
+      hint.style.display = "block";
+      location.href = deeplink; // auto open
+    } else {
+      status.textContent = "Invalid or expired recovery link. Please request a new reset.";
+    }
+  </script>
+</body>
