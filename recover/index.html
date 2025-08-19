@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>
   // Supabase sends the token in the URL fragment (#)
-  const p = new URLSearchParams(location.hash.slice(1));
+const p = new URLSearchParams(location.hash.slice(1));
   const t = p.get("access_token");
   const type = p.get("type");
   if (type === "recovery" && t) {
