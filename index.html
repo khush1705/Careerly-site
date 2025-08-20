@@ -1,8 +1,35 @@
 <!doctype html>
-<html>
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
-  <body>
-    <h3>Careerly Pages</h3>
-    <p>Reset relay is at <a href="./recover/">/recover/</a></p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Careerly Pages</title>
+</head>
+<body>
+  <p>Forwarding…</p>
+  <script>
+    (function () {
+      // Supabase sends tokens in the fragment (#). Some clients may move it to ?query.
+      var hash = window.location.hash || "";     // e.g. "#type=recovery&access_token=..."
+      var search = window.location.search || ""; // e.g. "?type=recovery&access_token=..."
+
+      // Check if a recovery token exists in either place
+      var hasRecovery = (hash + search).indexOf("type=recovery") !== -1 &&
+                        (hash + search).indexOf("access_token=") !== -1;
+
+      if (hasRecovery) {
+        // Build the fragment we will pass to /recover/
+        // Prefer the actual fragment; if only query exists, convert it to a fragment
+        var frag = hash ? hash : ("#" + (search.startsWith("?") ? search.slice(1) : search));
+        // Redirect to /recover/ with the fragment intact
+        var target = "./recover/" + (frag.startsWith("#") ? frag : ("#" + frag));
+        window.location.replace(target);
+      } else {
+        // No token present – leave a minimal page (optional)
+        document.body.innerHTML = '<p>Reset relay is at <a href="./recover/">recover</a>.</p>';
+      }
+    })();
+  </script>
+  <noscript>JavaScript required for forwarding.</noscript>
+</body>
 </html>
